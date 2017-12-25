@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Eva</string>
+    <string name="please_wait">Please Wait....</string>
+    <string name="error_message">OOPS! Something went wrong. Please try again</string>
+    <string name="permission_alert">You need to allow access to this permissions</string>
+    <string name="splash_redefining">Redefining the shopping experience</string>
+    <string name="powered_by">POWERED BY</string>
+    <string name="action_search">Search</string>
+    <string name="facebook_app_id">1958863914439168</string>
+    <string name="title_profile">Profile</string>
+
+
+    <string-array name="nav_drawer_labels">
+        <item>Home</item>
+        <item>Profile</item>
+        <item>Hot Deals</item>
+        <item>Favorite</item>
+        <item>Discover</item>
+        <item>Tell a Friend</item>
+        <item>Privacy Policy</item>
+        <item>Contact Us</item>
+    </string-array>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="ok">OK</string>
+    <string name="title_beacons">Beacons</string>
+</resources>
