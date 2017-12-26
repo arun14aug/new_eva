@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.estimote.coresdk.common.requirements.SystemRequirementsChecker;
@@ -28,8 +30,6 @@ import com.threepsoft.eva.model.Sections;
 import com.threepsoft.eva.utils.EvaLog;
 import com.threepsoft.eva.utils.ServiceApi;
 import com.threepsoft.eva.utils.Utils;
-import com.threepsoft.eva.view.activity.CategoryActivity;
-import com.threepsoft.eva.view.activity.SectionsActivity;
 import com.threepsoft.eva.view.adapter.BeaconsAdapter;
 
 import java.util.ArrayList;
@@ -121,15 +121,24 @@ public class BeaconListFragment extends Fragment {
                 ArrayList<Sections> sections = beaconNameList.get(position).getSectionsArrayList();
                 if (sections == null)
                     sections = new ArrayList<>();
-                Intent intent;
+
+                Fragment fragment;
                 if (sections.size() == 0) {
-                    intent = new Intent(activity, CategoryActivity.class);
+                    fragment = new CategoryFragment();
                 } else {
-                    intent = new Intent(activity, SectionsActivity.class);
+                    fragment = new SectionsFragment();
                 }
-                intent.putExtra("spot_id", beaconNameList.get(position).getSpotId());
-                intent.putExtra("name", beaconNameList.get(position).getName());
-                startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString("spot_id", beaconNameList.get(position).getSpotId());
+                bundle.putString("name", beaconNameList.get(position).getName());
+                fragment.setArguments(bundle);
+                FragmentManager fragmentManager = ((FragmentActivity) activity)
+                        .getSupportFragmentManager();
+                String title = fragment.getClass().getSimpleName();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.container_body, fragment, title);
+                fragmentTransaction.addToBackStack(title);
+                fragmentTransaction.commit();
             }
 
             @Override
@@ -145,6 +154,10 @@ public class BeaconListFragment extends Fragment {
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
                 is_need = false;
+                // temporary basis beacon
+                Utils.showLoading(activity);
+                String url = ServiceApi.GET_NAMES + "uids=" + ServiceApi.UUID;
+                ModelManager.getInstance().getBeaconsManager().getNames(activity, true, url);
             }
         });
 

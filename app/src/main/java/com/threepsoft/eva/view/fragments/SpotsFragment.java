@@ -1,29 +1,28 @@
-package com.threepsoft.eva.view.activity;
+package com.threepsoft.eva.view.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.ViewGroup;
 
-import java.util.ArrayList;
-
-import de.greenrobot.event.EventBus;
 import com.threepsoft.eva.R;
-
 import com.threepsoft.eva.model.ModelManager;
 import com.threepsoft.eva.model.Spots;
 import com.threepsoft.eva.utils.EvaLog;
@@ -31,14 +30,19 @@ import com.threepsoft.eva.utils.ServiceApi;
 import com.threepsoft.eva.utils.Utils;
 import com.threepsoft.eva.view.adapter.SpotsAdapter;
 
+import java.util.ArrayList;
+
+import de.greenrobot.event.EventBus;
+
 import static android.Manifest.permission.CALL_PHONE;
 
-/*
- * Created by HP on 22-11-2017.
+/**
+ * Created by arunks on 26/12/17.
  */
 
-public class SpotsActivity extends Activity {
-    private static final String TAG = CategoryActivity.class.getName();
+public class SpotsFragment extends Fragment {
+
+    private static final String TAG = SpotsFragment.class.getName();
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeContainer;
     private Activity activity;
@@ -47,32 +51,34 @@ public class SpotsActivity extends Activity {
     private final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 0x01;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        activity = SpotsActivity.this;
-
-        spot_id = getIntent().getStringExtra("spot_id");
-        category_id = getIntent().getStringExtra("category_id");
-        subCategory_id = getIntent().getStringExtra("subCategory_id");
-        String name = getIntent().getStringExtra("name");
-
-        TextView txt_header = findViewById(R.id.txt_header);
-        txt_header.setText(name);
-        ImageView imageView = findViewById(R.id.ic_back);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        activity = super.getActivity();
+        String name = "";
+        try {
+            if (getArguments() != null) {
+                Bundle bundle = getArguments();
+                spot_id = bundle.getString("spot_id");
+                category_id = bundle.getString("category_id");
+                subCategory_id = bundle.getString("subCategory_id");
+                name = bundle.getString("name");
             }
-        });
 
-        recyclerView = findViewById(R.id.beacon_list);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        // set header
+        Intent intent = new Intent("Header");
+        intent.putExtra("message", name);
+
+        LocalBroadcastManager.getInstance(activity).sendBroadcast(intent);
+        View rootView = inflater.inflate(R.layout.fragment_beacon_list, container, false);
+        recyclerView = rootView.findViewById(R.id.beacon_list);
         // Lookup the swipe container view
-        swipeContainer = findViewById(R.id.swipeContainer);
+        swipeContainer = rootView.findViewById(R.id.swipeContainer);
 
-        recyclerView.addOnItemTouchListener(new SpotsActivity.RecyclerTouchListener(activity, recyclerView, new SpotsActivity.ClickListener() {
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(activity, recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
 
@@ -105,8 +111,8 @@ public class SpotsActivity extends Activity {
         else
             getData();
 
+        return rootView;
     }
-
     private void getData() {
         Utils.showLoading(activity);
         String url;
@@ -126,14 +132,14 @@ public class SpotsActivity extends Activity {
     }
 
     private boolean checkPermission() {
-        int result = ContextCompat.checkSelfPermission(getApplicationContext(), CALL_PHONE);
+        int result = ContextCompat.checkSelfPermission(activity, CALL_PHONE);
 
         return result == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermission() {
         String[] permissions = new String[]{CALL_PHONE};
-        ActivityCompat.requestPermissions(this, permissions, ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
+        ActivityCompat.requestPermissions(activity, permissions, ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
 
     }
 
@@ -188,9 +194,9 @@ public class SpotsActivity extends Activity {
     private class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
         private GestureDetector gestureDetector;
-        private SpotsActivity.ClickListener clickListener;
+        private ClickListener clickListener;
 
-        RecyclerTouchListener(Context context, final RecyclerView recyclerView, final SpotsActivity.ClickListener clickListener) {
+        RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
             this.clickListener = clickListener;
             gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
                 @Override

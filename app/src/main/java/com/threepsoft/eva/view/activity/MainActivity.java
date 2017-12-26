@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.estimote.coresdk.common.requirements.SystemRequirementsChecker;
 import com.estimote.coresdk.observation.region.beacon.BeaconRegion;
@@ -32,7 +33,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
 
-    private static final String TAG = MainActivity.class.getName();
     private Activity activity;
 
     private BeaconManager beaconManager;
@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             getSupportActionBar().setTitle(title);
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -180,6 +181,30 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
-
+        if (position == 4) {
+            startActivity(new Intent(activity, MapsMarkerActivity.class));
+        } else
+            displayViews(position);
     }
+
+    @Override
+    public void onBackPressed() {
+        Fragment f = fragmentManager.findFragmentById(R.id.container_body);
+        try {
+            if (f instanceof BeaconListFragment) {
+                if (backer)
+                    finish();
+                else {
+                    backer = true;
+                    Toast.makeText(activity, "Press again to exit the app.", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                super.onBackPressed();
+                backer = false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

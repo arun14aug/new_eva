@@ -24,4 +24,5 @@
     <string name="drawer_close">Close</string>
     <string name="ok">OK</string>
     <string name="title_beacons">Beacons</string>
+    <string name="google_maps_key">AIzaSyBr4baNGUf93MWF1r9vljfk9JNVOCPqodU</string>
 </resources>

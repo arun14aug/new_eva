@@ -1,18 +1,21 @@
-package com.threepsoft.eva.view.activity;
+package com.threepsoft.eva.view.fragments;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import java.util.ArrayList;
+import android.view.ViewGroup;
 
 import com.threepsoft.eva.R;
 import com.threepsoft.eva.model.BeaconValues;
@@ -20,11 +23,13 @@ import com.threepsoft.eva.model.ModelManager;
 import com.threepsoft.eva.model.Sections;
 import com.threepsoft.eva.view.adapter.SectionAdapter;
 
+import java.util.ArrayList;
+
 /*
- * Created by HP on 09-12-2017.
+ * Created by arunks on 26/12/17.
  */
 
-public class SectionsActivity extends Activity {
+public class SectionsFragment extends Fragment {
 
     private Activity activity;
     private String id = "";
@@ -32,35 +37,63 @@ public class SectionsActivity extends Activity {
     private ArrayList<Sections> sectionsArrayList;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        activity = SectionsActivity.this;
-
-        id = getIntent().getStringExtra("spot_id");
-        String name = getIntent().getStringExtra("name");
-
-        TextView txt_header = findViewById(R.id.txt_header);
-        txt_header.setText(name);
-        ImageView imageView = findViewById(R.id.ic_back);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        activity = super.getActivity();
+        String name = "";
+        try {
+            if (getArguments() != null) {
+                Bundle bundle = getArguments();
+                id = bundle.getString("spot_id");
+                name = bundle.getString("name");
             }
-        });
 
-        recyclerView = findViewById(R.id.section_list);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            id = "";
+            name = "";
+        }
+
+        // set header
+        Intent intent = new Intent("Header");
+        intent.putExtra("message", name);
+
+        LocalBroadcastManager.getInstance(activity).sendBroadcast(intent);
+        View rootView = inflater.inflate(R.layout.activity_sections, container, false);
+
+//        TextView txt_header = findViewById(R.id.txt_header);
+//        txt_header.setText(name);
+//        ImageView imageView = findViewById(R.id.ic_back);
+//        imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
+
+        recyclerView = rootView.findViewById(R.id.section_list);
         // Lookup the swipe container view
-        recyclerView.addOnItemTouchListener(new SectionsActivity.RecyclerTouchListener(activity, recyclerView, new SectionsActivity.ClickListener() {
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(activity, recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Intent intent = new Intent(activity, CategoryActivity.class);
-                intent.putExtra("spot_id", id);
-                intent.putExtra("section_id", sectionsArrayList.get(position).getSectionID());
-                intent.putExtra("name", sectionsArrayList.get(position).getSectionName());
-                startActivity(intent);
+//                Intent intent = new Intent(activity, CategoryActivity.class);
+//                intent.putExtra("spot_id", id);
+//                intent.putExtra("section_id", sectionsArrayList.get(position).getSectionID());
+//                intent.putExtra("name", sectionsArrayList.get(position).getSectionName());
+//                startActivity(intent);
+                Fragment fragment = new CategoryFragment();
+                FragmentManager fragmentManager = ((FragmentActivity) activity)
+                        .getSupportFragmentManager();
+                String title = "CategoryFragment";
+                Bundle bundle = new Bundle();
+                bundle.putString("spot_id", id);
+                bundle.putString("section_id", sectionsArrayList.get(position).getSectionID());
+                bundle.putString("name", sectionsArrayList.get(position).getSectionName());
+                fragment.setArguments(bundle);
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.container_body, fragment, title);
+                fragmentTransaction.addToBackStack(title);
+                fragmentTransaction.commit();
             }
 
             @Override
@@ -70,6 +103,7 @@ public class SectionsActivity extends Activity {
         }));
 
         getData();
+        return rootView;
     }
 
     private void getData() {
@@ -99,9 +133,9 @@ public class SectionsActivity extends Activity {
     private class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
         private GestureDetector gestureDetector;
-        private SectionsActivity.ClickListener clickListener;
+        private ClickListener clickListener;
 
-        RecyclerTouchListener(Context context, final RecyclerView recyclerView, final SectionsActivity.ClickListener clickListener) {
+        RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
             this.clickListener = clickListener;
             gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
                 @Override

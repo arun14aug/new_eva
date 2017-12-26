@@ -13,4 +13,5 @@ public class ServiceApi {
     public static final String UUID = "03808778-0000-0000-0000-E3DA07F48134";
     public static final String MAJOR = "00380";
     public static final String MINOR = "8778";
+    public static final String GET_NEAR_BY = baseurl + "GetNearbyEVA?";
 }

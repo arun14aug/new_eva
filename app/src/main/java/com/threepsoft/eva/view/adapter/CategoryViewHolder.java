@@ -1,7 +1,11 @@
 package com.threepsoft.eva.view.adapter;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,13 +15,12 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;
-
 import com.threepsoft.eva.R;
 import com.threepsoft.eva.model.Category;
 import com.threepsoft.eva.utils.CustomVolleyRequestQueue;
 import com.threepsoft.eva.utils.ServiceApi;
 import com.threepsoft.eva.utils.Utils;
-import com.threepsoft.eva.view.activity.SpotsActivity;
+import com.threepsoft.eva.view.fragments.SpotsFragment;
 
 public class CategoryViewHolder extends GroupViewHolder {
 
@@ -74,11 +77,25 @@ public class CategoryViewHolder extends GroupViewHolder {
         osName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(activity, SpotsActivity.class);
-                intent.putExtra("spot_id", category.getSpotId());
-                intent.putExtra("category_id", category.getSpotCategoryID());
-                intent.putExtra("name", category.getName());
-                activity.startActivity(intent);
+//                Intent intent = new Intent(activity, SpotsActivity.class);
+//                intent.putExtra("spot_id", category.getSpotId());
+//                intent.putExtra("category_id", category.getSpotCategoryID());
+//                intent.putExtra("name", category.getName());
+//                activity.startActivity(intent);
+
+                Fragment fragment = new SpotsFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("spot_id", category.getSpotId());
+                bundle.putString("category_id", category.getSpotCategoryID());
+                bundle.putString("name", category.getName());
+                fragment.setArguments(bundle);
+                FragmentManager fragmentManager = ((FragmentActivity) activity)
+                        .getSupportFragmentManager();
+                String title = "SpotsFragment";
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.container_body, fragment, title);
+                fragmentTransaction.addToBackStack(title);
+                fragmentTransaction.commit();
             }
         });
 
