@@ -48,8 +48,8 @@
     <dimen name="cc_dates">48dp</dimen>
     <dimen name="cc_cvv">63dp</dimen>
 
-    <dimen name="logo_hgt">40dp</dimen>
-    <dimen name="logo_width">40dp</dimen>
+    <dimen name="logo_hgt">70dp</dimen>
+    <dimen name="logo_width">70dp</dimen>
 
     <dimen name="bottom_bar_height">50dp</dimen>
     <dimen name="chat_bar">48dp</dimen>

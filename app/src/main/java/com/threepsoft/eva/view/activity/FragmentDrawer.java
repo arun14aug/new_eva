@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -24,11 +25,16 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.threepsoft.eva.R;
 import com.threepsoft.eva.model.NavDrawerItem;
+import com.threepsoft.eva.utils.CircularNetworkImageView;
+import com.threepsoft.eva.utils.CustomVolleyRequestQueue;
 import com.threepsoft.eva.utils.EvaLog;
 import com.threepsoft.eva.utils.Preferences;
+import com.threepsoft.eva.utils.ServiceApi;
+import com.threepsoft.eva.utils.Utils;
 import com.threepsoft.eva.view.adapter.NavigationDrawerAdapter;
 
 import java.util.ArrayList;
@@ -86,12 +92,30 @@ public class FragmentDrawer extends Fragment {
 
         RelativeLayout nav_header_container = (RelativeLayout) layout.findViewById(R.id.nav_header_container);
 
-        TextView txt_mobile = (TextView) layout.findViewById(R.id.txt_mobile);
-        txt_party = (TextView) layout.findViewById(R.id.txt_party);
-        txt_mobile.setText(Preferences.readString(getActivity(), Preferences.FORMATTED_MOBILE_NUMBER, ""));
+        TextView txt_mobile = layout.findViewById(R.id.txt_mobile);
+        txt_party = layout.findViewById(R.id.txt_party);
+        txt_mobile.setText(Preferences.readString(getActivity(), Preferences.MOBILE_NUMBER, ""));
 
         if (Preferences.readString(getActivity(), Preferences.USER_NAME, "").length() > 0)
             txt_party.setText(Preferences.readString(getActivity(), Preferences.USER_NAME, ""));
+
+        CircularNetworkImageView imageView = layout.findViewById(R.id.icon_user);
+
+        String image = Preferences.readString(getActivity(), Preferences.USER_IMAGE, "");
+        if (!Utils.isEmptyString(image)) {
+            Log.e(" URL : ", "" + image);
+            ImageLoader mImageLoader;
+            mImageLoader = new CustomVolleyRequestQueue(getActivity())
+                    .getImageLoader();
+////        if (!imageUrl.equalsIgnoreCase("null"))
+            mImageLoader.get(image, ImageLoader.getImageListener(imageView,
+                /*R.drawable.logo*/ 0, /*R.drawable.logo*/ 0));
+            imageView.setImageUrl(image, mImageLoader);
+            imageView.setTag(image);
+
+        } else
+            imageView.setImageResource(R.mipmap.avatar);
+
 
         nav_header_container.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,6 +232,7 @@ public class FragmentDrawer extends Fragment {
 
 
     }
+
     /**
      * Header heading update method
      **/

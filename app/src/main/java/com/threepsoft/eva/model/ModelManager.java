@@ -9,13 +9,16 @@ public class ModelManager {
     private static ModelManager modelMgr = null;
 
     private BeaconsManager beaconsManager;
+    private AuthenticationManager authenticationManager;
 
     private ModelManager() {
         beaconsManager = new BeaconsManager();
+        authenticationManager = new AuthenticationManager();
     }
 
     public void clearManagerInstance() {
         this.beaconsManager = null;
+        this.authenticationManager = null;
     }
 
     public static ModelManager getInstance() {
@@ -35,5 +38,9 @@ public class ModelManager {
 
     public BeaconsManager getBeaconsManager() {
         return beaconsManager;
+    }
+
+    public AuthenticationManager getAuthenticationManager() {
+        return authenticationManager;
     }
 }

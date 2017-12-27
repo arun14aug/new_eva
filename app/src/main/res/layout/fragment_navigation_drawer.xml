@@ -13,39 +13,43 @@
         android:padding="@dimen/padding_10">
 
 
-        <ImageView
+        <com.threepsoft.eva.utils.CircularNetworkImageView
             android:id="@+id/icon_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/padding_10"
-            android:layout_marginRight="@dimen/padding_10"
+            android:layout_width="@dimen/logo_width"
+            android:layout_height="@dimen/logo_hgt"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_margin="@dimen/padding_5"
             android:contentDescription="@string/app_name"
-            android:src="@mipmap/avatar" />
+            android:scaleType="fitXY" />
 
-        <TextView
-            android:id="@+id/txt_mobile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/icon_user"
-            android:layout_gravity="center_vertical|start"
-            android:layout_margin="@dimen/padding_10"
-            android:text="@string/title_profile"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/text_size_large" />
-
-
-        <TextView
-            android:id="@+id/txt_party"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_gravity="center_vertical|start"
-            android:layout_marginLeft="@dimen/padding_10"
-            android:layout_marginRight="@dimen/padding_10"
-            android:text="@string/title_profile"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/text_size_large" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_party"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:layout_margin="@dimen/padding_10"
+                android:text="@string/title_profile"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/text_size_large" />
+
+            <TextView
+                android:id="@+id/txt_mobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginLeft="@dimen/padding_10"
+                android:layout_marginRight="@dimen/padding_10"
+                android:text="@string/title_profile"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/text_size_large" />
+        </LinearLayout>
 
     </RelativeLayout>
 

@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "181340761209",
+    "firebase_url": "https://eeva-fabc2.firebaseio.com",
+    "project_id": "eeva-fabc2",
+    "storage_bucket": "eeva-fabc2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181340761209:android:635a29e03ded7149",
+        "android_client_info": {
+          "package_name": "com.threepsoft.eva"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "181340761209-p1f3e5prputtesqolmd8ve1oua67p766.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.threepsoft.eva",
+            "certificate_hash": "8d4d4223346b09ae7d363e183857dae7d79deeaf"
+          }
+        },
+        {
+          "client_id": "181340761209-lcnfbjugqf7t798ogoia6jnbo3boimjb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPkNe91Dsc6Crt3TdOa3SxXHBcIT9vX80"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "181340761209-25j3cbhko30e3ars9183v9hs60re1an1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.3psoft.eva"
+              }
+            },
+            {
+              "client_id": "181340761209-lcnfbjugqf7t798ogoia6jnbo3boimjb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

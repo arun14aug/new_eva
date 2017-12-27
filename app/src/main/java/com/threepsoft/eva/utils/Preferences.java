@@ -29,13 +29,11 @@ public class Preferences {
     public static final String MAC_ADDRESS = "mac_address";
     public static final String DEVICE_NAME = "device_name";
     public static final String MOBILE_NUMBER = "mobile_number";
-    public static final String FORMATTED_MOBILE_NUMBER = "formatted_mobile_number";
-    public static final String BANKING_ENABLED = "banking_enabled";
-    public static final String PASSCODE_TURN_ON = "passcode_turn_on";
-    public static final String PASSCODE_VALUE = "passcode_value";
-    public static final String LATER_CASE = "later_case";
+    public static final String USER_IMAGE = "user_image";
+    public static final String EMAIL = "email";
     public static final String USER_NAME = "user_name";
     public static final String GCM_TOKEN = "gcm_token";
+    public static final String UID = "uid";
 
     //  GpPreferences.writeString(getApplicationContext(), Preferences.NAME, "dev");
     // GpPreferences.readString(getApplicationContext(), Preferences.NAME, "");
@@ -102,7 +100,8 @@ public class Preferences {
         getEditor(context).putString(DEVICE_NAME, null).commit();
         getEditor(context).putString(OTP_SENT, null).commit();
         getEditor(context).putString(MOBILE_NUMBER, null).commit();
-        getEditor(context).putString(FORMATTED_MOBILE_NUMBER, null).commit();
+        getEditor(context).putString(EMAIL, null).commit();
+        getEditor(context).putString(USER_IMAGE, null).commit();
 //        getEditor(context).putString(EMAIL, null).commit();
 //        getEditor(context).putString(PASSWORD, null).commit();
 //        getEditor(context).putString(DEVICE_ID, null).commit();

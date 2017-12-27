@@ -131,6 +131,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //                fragment = new TransactionsFragment();
 //                title = getString(R.string.title_transactions);
 //                break;
+//            case 4:
+//                fragment = new DiscoverFragment();
+//                title = getString(R.string.title_beacons);
+//                break;
+//            case 8:
+//                fragment = new DiscoverFragment();
+//                title = getString(R.string.title_beacons);
+//                break;
             default:
                 break;
         }

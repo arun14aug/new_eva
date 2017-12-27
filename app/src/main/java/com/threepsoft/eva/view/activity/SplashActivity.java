@@ -65,7 +65,7 @@ public class SplashActivity extends Activity {
             @Override
             public void onFinish() {
 
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                 /* Close this activity screen */
                 finish();
 

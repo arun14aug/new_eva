@@ -13,6 +13,9 @@ import com.estimote.coresdk.service.BeaconManager;
 
 import java.util.List;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.firebase.client.Firebase;
 import com.threepsoft.eva.utils.ServiceApi;
 
 public class MyApplication extends Application {
@@ -22,6 +25,11 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Firebase.setAndroidContext(this);
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
 
         beaconManager = new BeaconManager(getApplicationContext());
         beaconManager.setMonitoringListener(new BeaconManager.BeaconMonitoringListener() {

@@ -27,7 +27,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
             R.mipmap.ic_launcher_round, R.mipmap.ic_launcher_round,
             R.mipmap.ic_launcher_round, R.mipmap.ic_launcher_round,
             R.mipmap.ic_launcher_round, R.mipmap.ic_launcher_round,
-            R.mipmap.ic_launcher_round};
+            R.mipmap.ic_launcher_round, R.mipmap.ic_launcher_round};
 
 
     public NavigationDrawerAdapter(Context context, List<NavDrawerItem> data) {
