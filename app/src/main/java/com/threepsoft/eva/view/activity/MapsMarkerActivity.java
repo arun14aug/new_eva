@@ -2,9 +2,15 @@ package com.threepsoft.eva.view.activity;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.VectorDrawable;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -18,10 +24,21 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.threepsoft.eva.R;
+import com.threepsoft.eva.model.ModelManager;
+import com.threepsoft.eva.model.NearByEva;
+import com.threepsoft.eva.utils.EvaLog;
+import com.threepsoft.eva.utils.ServiceApi;
+import com.threepsoft.eva.utils.Utils;
+
+import java.util.ArrayList;
+
+import de.greenrobot.event.EventBus;
 
 /*
  * Created by arunks on 26/12/17.
@@ -41,12 +58,17 @@ public class MapsMarkerActivity extends AppCompatActivity
     private GoogleApiClient googleApiClient;
     //Our Map
     private GoogleMap mMap;
+    private Activity activity;
+    private ArrayList<NearByEva> nearByEvaArrayList;
+    private String TAG = MapsMarkerActivity.this.getClass().getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_maps);
+
+        this.activity = MapsMarkerActivity.this;
         // Get the SupportMapFragment and request notification
         // when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -67,18 +89,24 @@ public class MapsMarkerActivity extends AppCompatActivity
                 finish();
             }
         });
+
+        Utils.showLoading(activity);
+        String url = ServiceApi.GET_NEAR_BY;
+        ModelManager.getInstance().getBeaconsManager().getNearByEva(activity, true, url);
     }
 
     @Override
     protected void onStart() {
         googleApiClient.connect();
         super.onStart();
+        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onStop() {
         googleApiClient.disconnect();
         super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     //Getting current location
@@ -179,7 +207,7 @@ public class MapsMarkerActivity extends AppCompatActivity
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 
@@ -214,4 +242,67 @@ public class MapsMarkerActivity extends AppCompatActivity
         moveMap();
     }
 
+    private void addMarkers() {
+        for (int i = 0; i < nearByEvaArrayList.size(); i++) {
+            NearByEva nearByEva = nearByEvaArrayList.get(i);
+
+            createMarker(Double.parseDouble(nearByEva.getLatitude()), Double.parseDouble(nearByEva.getLongitude()),
+                    nearByEva.getName(), nearByEva.getAddressLine1());
+        }
+    }
+
+    protected void createMarker(double latitude, double longitude, String title, String snippet) {
+
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(latitude, longitude))
+                .anchor(0.5f, 0.5f)
+                .title(title)
+                .snippet(snippet)
+                .icon(getBitmapDescriptor(R.drawable.ic_place)));
+        //Moving the camera
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latitude, longitude)));
+
+        //Animating the camera
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+    }
+
+    private BitmapDescriptor getBitmapDescriptor(int id) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            VectorDrawable vectorDrawable = (VectorDrawable) getDrawable(id);
+
+            int h = vectorDrawable.getIntrinsicHeight();
+            int w = vectorDrawable.getIntrinsicWidth();
+
+            vectorDrawable.setBounds(0, 0, w, h);
+
+            Bitmap bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bm);
+            vectorDrawable.draw(canvas);
+
+            return BitmapDescriptorFactory.fromBitmap(bm);
+
+        } else {
+            return BitmapDescriptorFactory.fromResource(id);
+        }
+    }
+
+    public void onEventMainThread(String message) {
+        if (message.equalsIgnoreCase("GetNearBy True")) {
+            Utils.dismissLoading();
+            nearByEvaArrayList = ModelManager.getInstance().getBeaconsManager().getNearByEva(activity, false, "");
+            if (nearByEvaArrayList != null)
+                if (nearByEvaArrayList.size() > 0)
+                    addMarkers();
+                else
+                    Utils.showMessage(activity, "No record found");
+            else
+                Utils.showMessage(activity, "No record found");
+            EvaLog.e(TAG, "GetNearBy True");
+        } else if (message.equalsIgnoreCase("GetNearBy False")) {
+            Utils.showMessage(activity, getString(R.string.error_message));
+            EvaLog.e(TAG, "GetNearBy False");
+            Utils.dismissLoading();
+        }
+
+    }
 }
