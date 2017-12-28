@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.threepsoft.eva.R;
 import com.threepsoft.eva.model.User;
+import com.threepsoft.eva.utils.Preferences;
 
 /**
  * Created by arunks on 27/12/17.
@@ -128,6 +129,12 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void saveNewUser(String userId, String name, String phone, String email, String password) {
         User user = new User(userId,name,phone,email,password, "");
+
+        Preferences.clearAllPreference(SignUpActivity.this);
+        Preferences.writeString(SignUpActivity.this, Preferences.USER_NAME, name);
+        Preferences.writeString(SignUpActivity.this, Preferences.EMAIL, email);
+        Preferences.writeString(SignUpActivity.this, Preferences.MOBILE_NUMBER, phone);
+        Preferences.writeString(SignUpActivity.this, Preferences.UID, userId);
 
         mRef.child("users").child(userId).setValue(user);
     }

@@ -13,4 +13,6 @@
     <color name="dialog_bg_color">#FFF0F2F4</color>
     <color name="transparent_bg_color">#77dedfd1</color>
     <color name="transparent">#00000000</color>
+    <color name="disable_color">#FFC8C7CC</color>
+    <color name="blue">#1E88E5</color>
 </resources>

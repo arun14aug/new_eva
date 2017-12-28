@@ -23,11 +23,11 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     private List<NavDrawerItem> data = Collections.emptyList();
     private LayoutInflater inflater;
     //    private Context context;
-    private Integer[] icons = {R.mipmap.ic_launcher_round,
-            R.mipmap.ic_launcher_round, R.mipmap.ic_launcher_round,
-            R.mipmap.ic_launcher_round, R.mipmap.ic_launcher_round,
-            R.mipmap.ic_launcher_round, R.mipmap.ic_launcher_round,
-            R.mipmap.ic_launcher_round, R.mipmap.ic_launcher_round};
+    private Integer[] icons = {R.drawable.ic_home,
+            R.drawable.ic_profile, R.drawable.ic_hot_deals,
+            R.drawable.ic_favorite, R.drawable.ic_map,
+            R.drawable.ic_share, R.drawable.ic_report,
+            R.drawable.ic_contact_us, R.drawable.ic_logout};
 
 
     public NavigationDrawerAdapter(Context context, List<NavDrawerItem> data) {

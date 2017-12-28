@@ -27,4 +27,15 @@
     <string name="title_beacons">Beacons</string>
     <string name="google_maps_key">AIzaSyBr4baNGUf93MWF1r9vljfk9JNVOCPqodU</string>
     <string name="title_activity_maps">Map</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="mobile">Mobile no</string>
+    <string name="password">Password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="login">Login</string>
+    <string name="facebook_login">FB Login</string>
+    <string name="facebook_logout">FB Logout</string>
+    <string name="twitter_consumer_key" translatable="false">9w1ML1yDH5xSSu8bGUSI7Wocp</string>
+    <string name="twitter_consumer_secret" translatable="false">u2Jlt4rOiz10iBbmHj6GNdzhSh7v5aqLS9JgreCaaxCBCnzD5C</string>
+    <string name="twitter_logout">Twitter Logout</string>
 </resources>

@@ -16,7 +16,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorAccent"
+            android:background="@color/red"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
@@ -41,88 +41,76 @@
             android:id="@+id/email_sign_up_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_margin="@dimen/padding_20"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/text_view_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="15dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="Enter Your User Name"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                android:textStyle="bold|italic" />
-
-            <EditText
-                android:id="@+id/edit_text_username"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:inputType="textPersonName" />
+                android:layout_marginTop="@dimen/padding_7">
 
+                <EditText
+                    android:id="@+id/edit_text_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/username"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_large" />
 
-            <TextView
-                android:id="@+id/text_view_phone_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="15dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="Enter Your Phone Number"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                android:textStyle="bold|italic" />
+            </android.support.design.widget.TextInputLayout>
 
-            <EditText
-                android:id="@+id/edit_text_phone_number"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:inputType="number" />
+                android:layout_marginTop="@dimen/padding_7">
 
+                <EditText
+                    android:id="@+id/edit_text_phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/mobile"
+                    android:inputType="phone"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_large" />
 
-            <TextView
-                android:id="@+id/text_view_new_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="15dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="Enter Your Mail Id"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                android:textStyle="bold|italic" />
+            </android.support.design.widget.TextInputLayout>
 
-            <EditText
-                android:id="@+id/edit_text_new_email"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:inputType="textEmailAddress" />
+                android:layout_marginTop="@dimen/padding_7">
 
+                <EditText
+                    android:id="@+id/edit_text_new_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_large" />
 
-            <TextView
-                android:id="@+id/text_view_new_password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="15dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="Enter Your Password"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                android:textStyle="bold|italic" />
+            </android.support.design.widget.TextInputLayout>
 
-            <EditText
-                android:id="@+id/edit_text_new_password"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:inputType="textPassword" />
+                android:layout_marginTop="@dimen/padding_7">
 
+                <EditText
+                    android:id="@+id/edit_text_new_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_large" />
+
+            </android.support.design.widget.TextInputLayout>
 
             <Space
                 android:layout_width="1dp"
@@ -130,15 +118,14 @@
 
             <Button
                 android:id="@+id/button_user_sign_up"
-                style="?android:textAppearanceSmall"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:background="@drawable/button_red_bg"
                 android:onClick="onSignUpClicked"
-                android:background="@color/colorPrimary"
-                android:padding="10dp"
-                android:text="Sign Up Now"
-                android:textStyle="bold"
-                android:textColor="@color/colorWhite"/>
+                android:padding="@dimen/padding_5"
+                android:text="@string/sign_up"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/button_text_size" />
 
         </LinearLayout>
     </RelativeLayout>

@@ -43,6 +43,9 @@
         <activity
             android:name=".view.activity.MapsMarkerActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.ProfileActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -55,7 +58,7 @@
 
         <service
             android:name=".background_task.BeaconScanningService"
-            android:enabled="true"></service>
+            android:enabled="true"/>
 
         <receiver
             android:name=".background_task.BeaconScanningRestarterBroadcastReceiver"
@@ -72,11 +75,23 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <!-- Implement support for Chrome Custom Tabs -->
         <activity
-            android:name="com.facebook.FacebookActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/facebook_app_id" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
