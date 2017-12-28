@@ -9,6 +9,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.threepsoft.eva.utils.EvaLog;
+import com.threepsoft.eva.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,8 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import de.greenrobot.event.EventBus;
-import com.threepsoft.eva.utils.EvaLog;
-import com.threepsoft.eva.utils.Utils;
 
 /*
  * Created by HP on 21-11-2017.
@@ -33,6 +33,7 @@ public class BeaconsManager {
     private ArrayList<Category> categoryArrayList;
     private ArrayList<Spots> spotsArrayList;
     private ArrayList<SearchContent> searchContentArrayList = new ArrayList<>();
+    private ArrayList<NearByEva> nearByEvaArrayList;
 
     public ArrayList<SearchContent> getSearchContentArrayList() {
         return searchContentArrayList;
@@ -266,6 +267,92 @@ public class BeaconsManager {
             public void onErrorResponse(VolleyError error) {
                 EvaLog.e("Error Response : ", "Error: " + error.getMessage());
                 EventBus.getDefault().post("GetSpots False");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String credentials = "mqttuser:85wj3@321!";
+                String auth = "Basic "
+                        + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+                headers.put("Content-Type", "application/json");
+                headers.put("Authorization", auth);
+                return headers;
+            }
+        };
+        RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    public ArrayList<NearByEva> getNearByEva(Activity activity, boolean shouldRefresh, String url) {
+        if (shouldRefresh)
+            getNearBy(activity, url);
+        return nearByEvaArrayList;
+    }
+
+    private void getNearBy(Activity activity, String url) {
+        EvaLog.e("json data : ", url);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.e(TAG, "onSuccess  --> " + response.toString());
+
+                try {
+                    int count = response.length();
+                    nearByEvaArrayList = new ArrayList<>();
+                    if (count > 0) {
+                        for (int i = 0; i < count; i++) {
+                            NearByEva nearByEva = new NearByEva();
+
+                            nearByEva.setSpotId(response.getJSONObject(i).getString("SpotId"));
+                            nearByEva.setUID(response.getJSONObject(i).getString("UID"));
+                            nearByEva.setName(response.getJSONObject(i).getString("Name"));
+                            nearByEva.setImagePath(response.getJSONObject(i).getString("ImagePath"));
+                            nearByEva.setType(response.getJSONObject(i).getString("Type"));
+                            nearByEva.setAddressLine1(response.getJSONObject(i).getString("AddressLine1"));
+                            nearByEva.setAddressLine2(response.getJSONObject(i).getString("AddressLine2"));
+                            nearByEva.setCity(response.getJSONObject(i).getString("City"));
+                            nearByEva.setState(response.getJSONObject(i).getString("State"));
+                            nearByEva.setPincode(response.getJSONObject(i).getString("Pincode"));
+                            nearByEva.setLatitude(response.getJSONObject(i).getString("Latitude"));
+                            nearByEva.setLongitude(response.getJSONObject(i).getString("Longitude"));
+                            nearByEva.setStatus(response.getJSONObject(i).getString("Status"));
+                            nearByEva.setStatusText(response.getJSONObject(i).getString("StatusText"));
+
+                            if (response.getJSONObject(i).has("Sections")) {
+                                Object item = response.getJSONObject(i).get("Sections");
+                                if (item instanceof JSONArray) {
+                                    JSONArray jsonArray = response.getJSONObject(i).getJSONArray("Sections");
+                                    ArrayList<Sections> sectionsArrayList = new ArrayList<>();
+                                    for (int j = 0; j < jsonArray.length(); j++) {
+                                        Sections sections = new Sections();
+                                        sections.setSectionID(jsonArray.getJSONObject(i).getString("SectionID"));
+                                        sections.setSectionName(jsonArray.getJSONObject(i).getString("SectionName"));
+                                        sections.setImagePath(jsonArray.getJSONObject(i).getString("ImagePath"));
+                                        sectionsArrayList.add(sections);
+                                    }
+                                    nearByEva.setSectionsArrayList(sectionsArrayList);
+                                }
+                            }
+
+                            nearByEvaArrayList.add(nearByEva);
+                        }
+                        EventBus.getDefault().post("GetNearBy True");
+                    } else
+                        EventBus.getDefault().post("GetNearBy False");
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    EventBus.getDefault().post("GetNearBy False");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                EvaLog.e("Error Response : ", "Error: " + error.getMessage());
+                EventBus.getDefault().post("GetNearBy False");
             }
         }) {
             @Override
